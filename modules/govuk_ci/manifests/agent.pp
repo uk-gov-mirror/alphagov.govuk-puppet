@@ -4,6 +4,10 @@
 #
 # === Parameters:
 #
+#
+# [*guix_enabled*]
+#   Set to true to install the Guix service on this agent
+#
 # [*master_ssh_key*]
 #   The public SSH key of the CI master to enable SSH based agent builds
 #
@@ -11,6 +15,7 @@
 #   The version of the GDAL library to install for mapit
 #
 class govuk_ci::agent(
+  $guix_enabled = false,
   $master_ssh_key = undef,
   $gemstash_server = 'http://gemstash.cluster',
   $gdal_version,
@@ -27,8 +32,9 @@ class govuk_ci::agent(
   include ::govuk_ci::agent::redis
   include ::govuk_ci::agent::docker
   include ::golang
-  include ::guix
-  include ::govuk_ci::agent::gcloud
+  if $guix_enabled {
+    include ::guix
+  }
   include ::govuk_ci::agent::mongodb
   include ::govuk_ci::agent::mysql
   include ::govuk_ci::agent::postgresql
