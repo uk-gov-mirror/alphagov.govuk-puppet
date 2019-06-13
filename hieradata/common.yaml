@@ -410,6 +410,7 @@ govuk::apps::email_alert_api::unicorn_worker_processes: '8'
 govuk::apps::email_alert_api::email_address_override_whitelist:
   - govuk-email-courtesy-copies@digital.cabinet-office.gov.uk
   - bevan.loon@digital.cabinet-office.gov.uk
+  - bruce.bolt@digital.cabinet-office.gov.uk
   - complaint@simulator.amazonses.com
   - deborah.chua@digital.cabinet-office.gov.uk
   - edward.kerry@digital.cabinet-office.gov.uk
