@@ -27,10 +27,6 @@ FORGE
       puppetlabs-stdlib (>= 3.0.0)
     gdsoperations-unattended_reboot (0.3.0)
       puppetlabs-stdlib (< 5.0.0, >= 3.0.0)
-    jamesnetherton-google_chrome (0.4.0)
-      puppet-zypprepo (< 3.0.0, >= 2.0.0)
-      puppetlabs-apt (< 5.0.0, >= 2.0.0)
-      puppetlabs-stdlib (< 5.0.0, >= 4.0.0)
     maestrodev-wget (1.5.0)
     nextrevision-automysqlbackup (0.2.4)
       puppetlabs-stdlib (>= 3.0.0)
@@ -222,7 +218,6 @@ DEPENDENCIES
   gdsoperations-resolvconf (= 0.2.0)
   gdsoperations-unattended_reboot (= 0.3.0)
   goldyfruit-grub2 (>= 0)
-  jamesnetherton-google_chrome (= 0.4.0)
   maestrodev-wget (>= 1.1.0)
   nextrevision-automysqlbackup (>= 0)
   puppet-archive (= 1.1.2)
@@ -248,4 +243,3 @@ DEPENDENCIES
   saz-sudo (= 3.1.0)
   saz-timezone (>= 0)
   simondeziel-apparmor (>= 0)
-
