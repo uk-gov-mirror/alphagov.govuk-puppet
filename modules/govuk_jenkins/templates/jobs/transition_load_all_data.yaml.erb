@@ -22,11 +22,6 @@
             git clone --branch release --depth 1 git@github.com:alphagov/transition-config.git data/transition-config
             rsync --delete -avz -e ssh data/transition-config deploy@$HOSTNAME:/var/apps/transition/data
             ssh deploy@$HOSTNAME "cd /var/apps/transition && govuk_setenv transition bundle exec rake import:all[$BUCKET]"
-    publishers:
-        - trigger-parameterized-builds:
-            - project: Bouncer_CDN
-              condition: 'SUCCESS'
-              trigger-with-no-params: true
     wrappers:
         - ansicolor:
             colormap: xterm
