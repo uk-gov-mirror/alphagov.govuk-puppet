@@ -58,3 +58,7 @@
             <%- if @app_domain -%>
             default: <%= @app_domain %>
             <%- end -%>
+    triggers:
+        - timed: |
+            TZ=Europe/London
+            H 10 * * *
