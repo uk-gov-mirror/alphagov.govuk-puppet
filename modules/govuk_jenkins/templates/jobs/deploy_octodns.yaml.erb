@@ -1,0 +1,69 @@
+---
+- scm:
+    name: Deploy_Octodns
+    scm:
+        - git:
+            url: git@github.com:alphagov/gds-dns-config.git
+            branches:
+              - master
+            wipe-workspace: true
+            clean:
+                after: true
+
+- job:
+    name: Deploy_Octodns
+    display-name: Deploy_Octodns
+    project-type: freestyle
+    properties:
+        - build-discarder:
+            days-to-keep: 30
+            artifact-num-to-keep: 5
+        - github:
+            url: https://github.com/alphagov/gds-dns-config/
+    scm:
+      - Deploy_Octodns
+    wrappers:
+        - ansicolor:
+            colormap: xterm
+        - build-name:
+            name: '${ENV,var="ZONE"} ${ENV,var="ACTION"}'
+        - credentials-binding:
+            - text:
+               credential-id: <%= @gce_credential_id %>
+               variable: GOOGLE_CREDENTIALS
+    builders:
+        - shell: |
+            export GOOGLE_PROJECT=<%= @gce_project_id %>
+            export GOOGLE_REGION=europe-west1
+            export DEPLOY_ENV=<%= @environment %>
+
+            export ZONE=$ZONE
+            ./jenkins.sh ${ACTION}
+    publishers:
+        - text-finder:
+            regexp: "Plan.*\\d* to add, \\d* to change, \\d* to destroy."
+            also-check-console-output: true
+            unstable-if-found: true
+    parameters:
+        - choice:
+            name: ZONE
+            description: Choose the zone to deploy
+            choices: <%= ['-- Choose a zone'] + @zones %>
+        - string:
+            name: AWS_ACCESS_KEY_ID
+            default: false
+            description: This is required for all providers
+        - password:
+            name: AWS_SECRET_ACCESS_KEY
+            default: false
+            description: This is required for all providers
+        - password:
+            name: AWS_SESSION_TOKEN
+            default: false
+            description: This is required for all providers
+        - choice:
+            name: ACTION
+            description: Choose whether to plan (default) or apply
+            choices:
+                - plan
+                - apply
