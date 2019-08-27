@@ -26,7 +26,7 @@
 class govuk_rabbitmq::federate (
   $federation_user = undef,
   $federation_pass = undef,
-  $upstream_servers = undef,
+  $upstream_servers = [undef],
   $upstream_name = undef,
   $federation_exchange = undef,
   $max_hops = 1,
