@@ -24,11 +24,11 @@
 #
 
 class govuk_rabbitmq::federate (
-  $federation_user,
-  $federation_pass,
-  $upstream_servers,
-  $upstream_name,
-  $federation_exchange,
+  $federation_user = undef,
+  $federation_pass = undef,
+  $upstream_servers = undef,
+  $upstream_name = undef,
+  $federation_exchange = undef,
   $max_hops = 1,
 ) {
     rabbitmq_plugin { 'rabbitmq_federation':
