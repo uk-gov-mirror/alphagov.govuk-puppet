@@ -346,7 +346,6 @@ task :check_consistency_between_aws_and_carrenza do
     monitoring::checks::cache::region
     monitoring::checks::rds::region
     nginx::config::stack_network_prefix
-    node_class
 
     backup::server::backup_hour
     cron::daily_hour
