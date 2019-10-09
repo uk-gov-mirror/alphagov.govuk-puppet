@@ -350,7 +350,6 @@ task :check_consistency_between_aws_and_carrenza do
     govuk::apps::content_data_admin::google_tag_manager_auth
     govuk::apps::content_data_admin::google_tag_manager_preview
     govuk::apps::link_checker_api::govuk_basic_auth_credentials
-    govuk::apps::short_url_manager::instance_name
     govuk::apps::support::zendesk_anonymous_ticket_email
     govuk::apps::support::zendesk_client_username
     govuk::apps::support_api::zendesk_client_username
