@@ -342,7 +342,6 @@ task :check_consistency_between_aws_and_carrenza do
     govuk::node::s_cache::router_as_container
     govuk_containers::terraboard::aws_bucket
     govuk_containers::terraboard::oauth2_proxy_base_url
-    govuk_datascrubber::ensure
     hosts::backend_migration::hosts
     monitoring::checks::cache::region
     monitoring::checks::rds::region
