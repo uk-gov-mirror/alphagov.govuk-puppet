@@ -347,7 +347,6 @@ task :check_consistency_between_aws_and_carrenza do
     monitoring::checks::rds::region
     nginx::config::stack_network_prefix
 
-    cron::daily_hour
     govuk::apps::content_data_admin::google_tag_manager_auth
     govuk::apps::content_data_admin::google_tag_manager_preview
     govuk::apps::link_checker_api::govuk_basic_auth_credentials
