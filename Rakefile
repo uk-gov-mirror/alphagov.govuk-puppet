@@ -353,7 +353,6 @@ task :check_consistency_between_aws_and_carrenza do
     govuk::apps::support::zendesk_anonymous_ticket_email
     govuk::apps::support::zendesk_client_username
     govuk::apps::support_api::zendesk_client_username
-    govuk::node::s_asset_master::copy_attachments_hour
     govuk::node::s_monitoring::offsite_backups
     govuk_cdnlogs::bouncer_monitoring_enabled
     govuk_cdnlogs::critical_cdn_freshness
