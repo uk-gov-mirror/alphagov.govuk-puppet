@@ -135,12 +135,6 @@ task :check_consistency_between_aws_and_carrenza do
     govuk::node::s_postgresql_standby::wale_private_gpg_key_fingerprint
     govuk::node::s_whitehall_mysql_backup::s3_bucket_name
     govuk::node::s_whitehall_mysql_master::s3_bucket_name
-    govuk_jenkins::config::banner_colour_background
-    govuk_jenkins::config::banner_colour_text
-    govuk_jenkins::config::banner_string
-    govuk_jenkins::config::theme_colour
-    govuk_jenkins::config::theme_environment_name
-    govuk_jenkins::config::theme_text_colour
     govuk_postgresql::server::standby::pgpassfile_enabled
     hosts::production::ip_bouncer
     hosts::production::licensify_hosts
