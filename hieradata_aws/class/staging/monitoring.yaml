@@ -1,0 +1,3 @@
+icinga::client::check_pings::endpoints:
+   licensify:
+     ip: 37.26.90.218
