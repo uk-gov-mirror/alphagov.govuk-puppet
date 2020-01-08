@@ -33,9 +33,11 @@ server {
   access_log /var/log/nginx/<%= @vhost_name -%>-json.event.access.log json_event;
   error_log /var/log/nginx/<%= @vhost_name -%>-error.log;
 
-  add_header "Access-Control-Allow-Origin" "*";
-  add_header "Access-Control-Allow-Methods" "GET, OPTIONS";
-  add_header "Access-Control-Allow-Headers" "origin, authorization";
+  location ~* \.(eot|otf|ttf|woff|woff2)$ {
+    add_header "Access-Control-Allow-Origin" "*";
+    add_header "Access-Control-Allow-Methods" "GET, OPTIONS";
+    add_header "Access-Control-Allow-Headers" "origin, authorization";
+  }
 
   location /government/uploads/system/uploads/consultation_response_form/ {
     add_header Cache-Control "public";
