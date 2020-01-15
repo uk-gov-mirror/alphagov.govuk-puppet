@@ -20,3 +20,4 @@ gem "sshkey", "1.9.0"
 gem "parallel_tests"
 gem "parallel"
 gem "librarian-puppet"
+gem 'github_merge_sign', '1.0.0'

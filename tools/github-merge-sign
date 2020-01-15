@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -eo pipefail
+test -z "${1}" && echo "Usage: github-merge-sign <pr-number>" && exit 1
+bundle exec github_merge_sign --pr "${1}"
