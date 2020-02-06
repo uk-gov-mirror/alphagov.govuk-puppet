@@ -1,0 +1,257 @@
+* Puppet workshop
+
+ - What's one thing you'd like to get out of this hour?
+
+** Overall architecture
+*** What is Puppet?
+**** A private company [[https://en.wikipedia.org/wiki/Puppet_(company)][(Wikipedia)]]
+
+Founded in 2005, released the first commercial product in 2011.
+
+**** A software project
+
+ - [[https://github.com/puppetlabs/puppet][Git repository]]
+ - Free software, licensed under the Apache License v2.0
+ - Written mostly in Ruby
+
+**** A language
+
+When using Puppet, you write something resembling a mix of software
+and configuration in the Puppet language.
+
+*** What version of Puppet are we using?
+
+[[file:Gemfile::gem%20"puppet",%20'3.8.5'][gem "puppet" in the Gemfile]]
+
+*** Where does Puppet run?
+
+Puppet usually runs in a agent/master architecture, Puppet agents run
+on the machines you want to manage, and talk to the Puppetmaster which
+runs on a different machine.
+
+*** Hieradata [[https://puppet.com/docs/puppet/latest/hiera_intro.html][(documentation)]]
+
+When using Hieradata, Puppet searches through the specified hierarchy
+in order. This means it's possible to override values specified in
+other hieradata files.
+
+The configuration for this can be found in the [[file:hiera.yml::---][Carrenza Hiera file
+(hiera.yml)]] and [[file:hiera_aws.yml::---][AWS Hiera file (hiera_aws.yml)]] files.
+
+**** =govuk-secrets=
+
+This Git repository contains more hieradata. It's useful for cases
+where you want the value to be private (as the GitHub repository is
+private), or private and encrypted.
+
+**** Automatic parameter lookup for classes
+
+[[file:hieradata_aws/production.yaml::govuk::apps::email_alert_api::email_archive_s3_enabled:%20true][Production.yaml govuk::apps:email_alert_api configuration]]
+
+**** Explicit lookups
+
+[[file:modules/govuk/manifests/apps/bouncer.pp::$app_domain%20=%20hiera('app_domain')][hiera lookup for the app_domain in the Bouncer manifest]]
+
+** The Puppet language
+*** Resources
+
+https://puppet.com/docs/puppet/3.8/lang_resources.html#syntax
+
+Resources are core to Puppet, most of Puppet just relates to managing
+resources.
+
+#+begin_src puppet
+
+type { 'title':
+  attribute => value,
+}
+
+#+end_src
+
+#+begin_src puppet
+
+package { 'ntp':
+  ensure => installed,
+}
+
+#+end_src
+
+#+begin_src puppet
+
+file { 'ntp.conf':
+  path    => '/etc/ntp.conf',
+  ensure  => file,
+  require => Package['ntp'],
+  source  => "puppet:///modules/ntp/ntp.conf",
+}
+
+#+end_src
+
+**** Collectors
+
+https://puppet.com/docs/puppet/3.8/lang_resources.html#amending-attributes-with-a-collector
+
+[[file:modules/govuk_ci/manifests/agent.pp::#%20Override%20sudoers.d%20resource%20(managed%20by%20sudo%20module)%20to%20enable%20Jenkins%20user%20to%20run%20sudo%20tests%20File<|title%20==%20'/etc/sudoers.d/'|>%20{%20mode%20=>%20'0555',%20}][/etc/sudoers.d/ File resource]]
+
+**** Relationships
+
+The order in which you specify resources in a manifest doesn't have an
+effect, but it can be important to specify relationships between
+resources.
+
+There are two types of relationships: *ordering*, and *ordering with
+notification*.
+
+The notification is a refresh event, what this involves is specific to
+the resource being refreshed.
+
+There is an example of this in the NGinx manifest:
+[[file:modules/nginx/manifests/config.pp::notify%20=>%20Class%5B'nginx::service'%5D;][/etc/nginx/mime.types notifying NGinx]]
+
+***** Relationships via metaparameters
+
+#+begin_src puppet
+
+package { 'openssh-server':
+  ensure => present,
+  before => File['/etc/ssh/sshd_config'],
+}
+
+#+end_src
+
+***** Relationships via chaining arrows
+
+https://puppet.com/docs/puppet/3.8/lang_relationships.html#chaining-arrows
+
+Two arrows, ~->~ for defining ordering, and ~~>~ for defining
+notification.
+
+#+begin_src puppet
+
+File['/etc/ntp.conf'] ~> Service['ntpd']
+
+#+end_src
+
+*** Classes
+
+Named blocks of Puppet code, they can take parameters.
+
+*** Defined Resource Types [[https://puppet.com/docs/puppet/3.8/lang_defined_types.html][(documentation)]]
+
+Blocks of Puppet code that can be evaluated multiple times with
+different parameters.
+
+Defined resource types act like a new resource type.
+
+*** Manifests
+
+A file containing Puppet code.
+
+*** Selector statements
+
+https://puppet.com/docs/puppet/3.8/lang_conditional.html#selectors
+
+#+begin_src puppet
+
+$rootgroup = $osfamily ? {
+    'Solaris'          => 'wheel',
+    /(Darwin|FreeBSD)/ => 'wheel',
+    default            => 'root',
+}
+
+#+end_src
+
+*** Resource collectors
+
+https://puppet.com/docs/puppet/3.8/lang_collectors.html
+
+*** Exported resources
+
+https://puppet.com/docs/puppet/3.8/lang_exported.html
+
+** How we use Puppet on GOV.UK
+*** Git repositories, =govuk-puppet= and =govuk-secrets=
+
+There are two Git repositories, one public, and one private.
+
+In addition to hieradata, govuk-secrets contains scripts for deploying
+govuk-puppet, and GPG encrypted passwords.
+
+*** How Puppet is run and disabled
+**** Running through Cron
+
+Puppet is run through Cron every half an hour: [[file:modules/puppet/manifests/cronjob.pp::cron%20{%20'puppet':%20ensure%20=>%20present,%20user%20=>%20'root',%20minute%20=>%20%5B$first_run,%20$second_run%5D,%20command%20=>%20'/usr/local/bin/govuk_puppet',%20require%20=>%20File%5B'/usr/local/bin/govuk_puppet'%5D,%20}][cronjob.pp in the
+puppet module]]
+
+One thing to note here is that this does not guarantee that the state
+of the machine is magically correct once Puppet has run. The behaviour
+of Puppet can be effected by external factors, like exported
+resources, so even with the same configuration, running Puppet 30
+minutes later might produce different results.
+
+One example of this is Icinga checks, when a new check is introduced,
+say for a backend machine, Puppet will need to run on that machine to
+gather information about the check, then run on the monitoring machine
+to use that information to create the relevant Icinga configuration.
+
+*** Common but specific considerations
+**** Removing users, and resources in general
+
+For some resources, Puppet does a good job of managing them and will
+converge more fully towards some state. For other resources, Puppet
+can do less complete job of managing the state.
+
+One example of good behaviour is the [[file:modules/icinga/manifests/config.pp::purge%20=>%20true,%20force%20=>%20true,%20recurse%20=>%20true,][Icinga configuration]], Puppet will
+remove configuration it doesn't recognise, which means you're more
+likely to converge on the state you've defined through Puppet.
+
+There are many examples though where you need to do extra work to get
+Puppet to do what you intend, especially when removing resources, as
+it's often necessary to tell Puppet to explicitly remove the resource.
+
+Note how this is different to Terraform. As it keeps information about
+the state of the world, which is fed in to from previous states of the
+configuration, it's possible to do more automatically, at the cost of
+managing this extra state information.
+
+**** Managing process lifecycles
+
+The notification behaviour associated with resources is useful, as it
+allows Puppet to handle more about their state. For example, not only
+can you change some configuration files on the disk, but you can have
+Puppet restart the relevant service so that it picks up the new
+configuration.
+
+There are some cases though where you might want to avoid this. For
+example, when using Puppet to manage PostgreSQL, if you change the
+value of the [[file:modules/govuk_postgresql/manifests/server.pp::postgresql::server::config_entry%20{%20'max_connections':%20value%20=>%20$max_connections;%20}][max_connections configuration]], as has happened in the
+past, then the default behaviour with Puppet would be to restart
+PostgreSQL to apply the change.
+
+This works, but will impact the services using
+PostgreSQL. Alternatively, you can connect to PostgreSQL and change
+it's configuration while it's running. To then appease Puppet without
+letting it restart PostgreSQL, you can disable Puppet, deploy the
+Puppet change, make the configuration change manually, then enable
+Puppet. This should trick Puppet in to thinking the configuration
+change has already been applied. Once the Puppet change has been
+deployed, you can check that Puppet won't restart PostgreSQL by
+running it with the ~--noop --test~ options.
+
+** The future
+
+ - We've had govuk-puppet since early 2012
+
+ - We now also use Terraform for managing resources
+
+ - govuk-puppet is:
+   - No longer involved in local development
+   - No longer responsible for DNS configuration in AWS
+   - Less involved in databases and request routing in AWS (due to the
+     use of RDS and ELB's)
+
+ - Maybe if GOV.UK ran atop the GOV.UK PaaS, then Puppet wouldn't be
+   relevant any longer
+
+ - Personally I'm interested in more generative approaches (GNU Guix
+   for example), rather than convergent approaches like Puppet
