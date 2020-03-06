@@ -13,17 +13,35 @@ perl_set $uri_lowercase 'sub {
 server {
   server_name         www.gov.uk;
   listen 80;
-  # Send the Strict-Transport-Security header
-  include             /etc/nginx/add-sts.conf;
 
+  include             /etc/nginx/add-sts.conf;
   include             /etc/nginx/router_include.conf;
+
+  location ~ ^/government/uploads/ {
+    return 301 https://assets.publishing.service.gov.uk$request_uri;
+  }
 }
 
 server {
-  server_name         www.* www-origin.* draft-origin.*;
+  server_name         www.* www-origin.*;
   listen 80;
-  # Send the Strict-Transport-Security header
-  include             /etc/nginx/add-sts.conf;
 
+  include             /etc/nginx/add-sts.conf;
   include             /etc/nginx/router_include.conf;
+
+  location ~ ^/government/uploads/ {
+    return 301 https://assets.publishing.service.gov.uk$request_uri;
+  }
+}
+
+server {
+  server_name         draft-origin.*;
+  listen 80;
+
+  include             /etc/nginx/add-sts.conf;
+  include             /etc/nginx/router_include.conf;
+
+  location ~ ^/government/uploads/ {
+    return 301 https://draft-assets.publishing.service.gov.uk$request_uri;
+  }
 }
