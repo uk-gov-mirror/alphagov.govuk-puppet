@@ -54,6 +54,11 @@ class govuk::node::s_apt (
       location => 'https://packagecloud.io/grafana/stable/debian',
       release  => 'jessie',
       key      => '418A7F2FB0E1E6E7EABF6FE8C2E73424D59097AB';
+    'grafana-stable':
+      location => 'https://packages.grafana.com/oss/deb',
+      release  => 'stable',
+      repos    => ['main'],
+      key      => '24098CB6';
     'mongodb':
       location => 'http://downloads-distro.mongodb.org/repo/ubuntu-upstart',
       release  => 'dist',
