@@ -750,6 +750,9 @@ govuk_unattended_reboot::monitoring_basic_auth:
   password: "%{hiera('http_password')}"
 
 grafana::repo::apt_mirror_hostname: "%{hiera('apt_mirror_hostname')}"
+# TODO: delete grafana::version here to upgrade Carrenza to the default version
+# from the grafana module (6.7.1).
+grafana::version: '4.5.2'
 grafana::dashboards::app_domain: "%{hiera('app_domain')}"
 grafana::dashboards::machine_suffix_metrics: ''
 grafana::dashboards::application_dashboards:

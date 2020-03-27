@@ -8,7 +8,7 @@
 #   Which version of Grafana to pin to.
 #
 class grafana (
-  $version = '4.5.2',
+  $version = '6.7.1',
 ) {
   include grafana::repo
   include grafana::dashboards

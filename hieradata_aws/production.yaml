@@ -288,6 +288,9 @@ govuk_sudo::sudo_conf:
     content: 'deploy ALL=NOPASSWD:/etc/init.d/postgresql'
 
 grafana::dashboards::machine_suffix_metrics: '_production'
+# TODO: delete grafana::version here to upgrade Prod to the default version
+# from the grafana module (6.7.1).
+grafana::version: '4.5.2'
 
 licensify::apps::configfile::mongo_database_reference_name: 'licensify-refdata'
 licensify::apps::configfile::mongo_database_audit_name: 'licensify-audit'
