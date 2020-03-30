@@ -708,6 +708,12 @@
               "refId": "D",
               "target": "aliasByNode(consolidateBy(maxSeries(stats.gauges.govuk.app.email-alert-api.*.workers.queues.delivery_immediate_high.enqueued), 'max'), 8, 9)",
               "textEditor": false
+            },
+            {
+              "hide": false,
+              "refId": "E",
+              "target": "aliasByNode(consolidateBy(maxSeries(stats.gauges.govuk.app.email-alert-api.*.workers.queues.delivery_transactional.enqueued), 'max'), 8, 9)",
+              "textEditor": false
             }
           ],
           "thresholds": [],
