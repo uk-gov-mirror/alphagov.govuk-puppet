@@ -96,6 +96,20 @@ class govuk_splunk(
     mode   => '0600',
   }
 
+  file { '/opt/splunkforwarder/etc/apps/govuk_cache/':
+    ensure => directory,
+    owner  => 'splunk',
+    group  => 'splunk',
+    mode   => '0600',
+  }
+
+  file { '/opt/splunkforwarder/etc/apps/govuk_cache/default/':
+    ensure => directory,
+    owner  => 'splunk',
+    group  => 'splunk',
+    mode   => '0600',
+  }
+
   file {'/opt/splunkforwarder/etc/apps/100_gds_splunkcloud/default/gds_server.pem':
     ensure  => file,
     owner   => 'splunk',
