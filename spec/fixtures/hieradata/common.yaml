@@ -105,6 +105,8 @@ govuk_rabbitmq::repo::apt_mirror_gpg_key_fingerprint: "%{hiera('apt_mirror_finge
 
 govuk_rbenv::all::apt_mirror_hostname: "%{hiera('apt_mirror_hostname')}"
 govuk_rbenv::all::apt_mirror_gpg_key_fingerprint: "%{hiera('apt_mirror_fingerprint')}"
+govuk_splunk::repos::apt_mirror_hostname: "%{hiera('apt_mirror_hostname')}"
+govuk_splunk::repos::apt_mirror_gpg_key_fingerprint: "%{hiera('apt_mirror_fingerprint')}"
 govuk_sysdig::apt_mirror_hostname: "%{hiera('apt_mirror_hostname')}"
 govuk_unattended_reboot::repo::apt_mirror_hostname: "%{hiera('apt_mirror_hostname')}"
 govuk_unattended_reboot::repo::apt_mirror_gpg_key_fingerprint: "%{hiera('apt_mirror_fingerprint')}"
