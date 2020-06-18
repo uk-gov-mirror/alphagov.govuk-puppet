@@ -4,11 +4,14 @@
 #
 
 govuk_user { 'splunk':
-  fullname    => 'Slunk User',
+  fullname    => 'Splunk User',
   email       => 'cyber.security@digital.cabinet-office.gov.uk',
-  groups      => ['splunk'],
+  groups      => ['splunk','deploy'],
   purgegroups => true,
 }
 group { 'splunk':
+  ensure => $ensure,
+}
+group { 'deploy':
   ensure => $ensure,
 }
