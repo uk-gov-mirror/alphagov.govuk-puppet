@@ -104,4 +104,6 @@ class govuk::apps::router (
     json   => {'add_error_key' => true},
   }
 
+  include govuk_splunk
+
 }
