@@ -112,7 +112,7 @@ class govuk_jenkins (
   }
 
   package { 'pipenv':
-    ensure   => '11.8.0',
+    ensure   => '11.8.2',
     provider => 'pip',
   }
 
