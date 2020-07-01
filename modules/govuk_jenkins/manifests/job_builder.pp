@@ -51,6 +51,11 @@ class govuk_jenkins::job_builder (
     provider => pip3,
   }
 
+  package { 'requests':
+    ensure   => '2.22.0',
+    provider => pip3,
+  }
+
   file { '/etc/jenkins_jobs':
     ensure  => directory,
     purge   => true,
