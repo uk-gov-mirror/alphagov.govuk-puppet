@@ -1,0 +1,23 @@
+govuk_env_sync::tasks:
+  "push_transition_test_daily":
+    ensure: "absent"
+    hour: "3"
+    minute: "0"
+    action: "push"
+    dbms: "postgresql"
+    storagebackend: "s3"
+    database: "transition_production"
+    temppath: "/tmp/transition_production"
+    url: "govuk-test-database-backups"
+    path: "transition-postgresql"
+  "pull_transition_test_daily":
+    ensure: "present"
+    hour: "6"
+    minute: "0"
+    action: "pull"
+    dbms: "postgresql"
+    storagebackend: "s3"
+    database: "transition_production"
+    temppath: "/tmp/transition_production"
+    url: "govuk-staging-database-backups"
+    path: "transition-postgresql"
