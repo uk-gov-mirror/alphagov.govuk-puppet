@@ -507,4 +507,4 @@ users::usernames:
   - vitaliemogoreanu
   - williamfranklin
 
-nginx::config::stack_network_prefix: '10.1.0'
+nginx::config::stack_network_prefix: '10.200.0'
