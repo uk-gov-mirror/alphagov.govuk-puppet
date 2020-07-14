@@ -43,6 +43,12 @@ class icinga::package {
     provider => 'system_gem',
   }
 
+  package { 'Sphinx':
+    ensure   => present,
+    provider => 'pip',
+    version  => '1.8.0',
+  }
+
   package { 'NagAconda':
     ensure   => present,
     provider => 'pip',
