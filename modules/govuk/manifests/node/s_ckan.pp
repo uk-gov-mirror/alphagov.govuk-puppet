@@ -21,7 +21,7 @@ class govuk::node::s_ckan inherits govuk::node::s_base {
   include govuk_python
   include nginx
   include postgresql::lib::devel
-  include govuk_java::openjdk7::jdk
+  include govuk_java::openjdk8::jdk
   include govuk_solr
 
   package { 'libgeos-c1':
