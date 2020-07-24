@@ -12,7 +12,7 @@ class govuk_solr6 (
   $present = true,
 ) {
   $package_ensure = $present ? {
-    false => absent,
+    false => purged,
     true  => present,
   }
 
