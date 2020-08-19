@@ -45,8 +45,6 @@ task :check_consistency_between_aws_and_carrenza do
     govuk_containers::frontend::haproxy::wildcard_publishing_certificate
     govuk_containers::frontend::haproxy::wildcard_publishing_key
     govuk_jenkins::config::user_permissions
-    govuk_jenkins::packages::sops::apt_mirror_hostname
-    govuk_jenkins::packages::sops::apt_mirror_gpg_key_fingerprint
     govuk_mysql::server::expire_log_days
     govuk_mysql::server::monitoring::master::plaintext_mysql_password
     govuk_mysql::server::monitoring::slave::plaintext_mysql_password
