@@ -198,8 +198,6 @@ class govuk::apps::ckan (
         value   => $pycsw_config;
     }
 
-    $app_domain = hiera('app_domain')
-
     govuk::app::nginx_vhost { 'ckan':
       vhost              => 'ckan',
       protected          => $vhost_protected,
@@ -209,7 +207,6 @@ class govuk::apps::ckan (
       read_timeout       => $request_timeout,
       nginx_extra_config => template('govuk/ckan/nginx.conf.erb'),
       deny_crawlers      => true,
-      http_host          => "ckan.${app_domain}",
     }
 
     file { $ckan_home:
