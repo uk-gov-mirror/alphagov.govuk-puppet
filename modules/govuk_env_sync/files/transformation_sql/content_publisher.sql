@@ -1,6 +1,6 @@
 -- This script is sourced from
 -- https://github.com/alphagov/content-publisher/blob/master/db/scrub_access_limited.sql
--- Any changes should be made their first and then copied here.
+-- Any changes should be made there first and then copied here.
 
 -- Remove current status of any access limited editions
 UPDATE editions
