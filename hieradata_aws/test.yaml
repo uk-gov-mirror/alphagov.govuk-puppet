@@ -59,6 +59,11 @@ govuk::apps::search_api::relevancy_bucket_name: 'govuk-test-search-relevancy'
 govuk::apps::search_api::sitemaps_bucket_name: 'govuk-test-sitemaps'
 govuk::apps::search_api::enable_learning_to_rank: true
 govuk::apps::search_api::tensorflow_sagemaker_endpoint: 'govuk-test-search-ltr-endpoint'
+# Disable Sentry in test env for Search API; see
+# https://trello.com/c/X1iGVbmo/269-stop-sending-so-many-errors-to-sentry
+# TODO: consider removing once the version of Search API deployed in test is
+# using govuk_app_config >= 2.6.0
+govuk::apps::search_api::sentry_dsn: ''
 govuk::apps::service_manual_publisher::govuk_notify_template_id: "759acac6-da53-4a19-b591-b7538c7c39de"
 govuk::apps::short_url_manager::govuk_notify_template_id: "759acac6-da53-4a19-b591-b7538c7c39de"
 govuk::apps::short_url_manager::instance_name: 'test'
