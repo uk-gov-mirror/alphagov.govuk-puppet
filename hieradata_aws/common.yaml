@@ -558,7 +558,7 @@ govuk::apps::frontend::nagios_memory_warning: 1200
 govuk::apps::frontend::nagios_memory_critical: 1400
 govuk::apps::frontend::redis_host: "%{hiera('sidekiq_host')}"
 govuk::apps::frontend::redis_port: "%{hiera('sidekiq_port')}"
-govuk::apps::frontend::unicorn_worker_processes: "4"
+govuk::apps::frontend::unicorn_worker_processes: "12"
 
 govuk::apps::government_frontend::nagios_memory_warning: 3600
 govuk::apps::government_frontend::nagios_memory_critical: 4000
