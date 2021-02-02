@@ -40,8 +40,8 @@ class govuk::apps::mapit (
       local_tcpconns_established_warning => 16,
       nginx_cache                        => {
         'key_name' => 'mapit_cache',
-        'key_size' => '50m',
-        'max_size' => '5g',
+        'key_size' => '100m',
+        'max_size' => '10g',
         'max_age'  => '24h',
       },
     }
