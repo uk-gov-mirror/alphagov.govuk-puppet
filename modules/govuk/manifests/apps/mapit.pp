@@ -17,6 +17,15 @@
 # [*sentry_dsn*]
 #   Configuration for Sentry error reporting
 #
+# [*gdal_version*]
+#   The version of the GDAL library to install for mapit
+#
+# [*geos_version*]
+#   The version of the GEOS library to install for mapit
+#
+# [*proj_version*]
+#   The version of the PROJ library to install for mapit
+#
 class govuk::apps::mapit (
   $enabled = false,
   $port,
@@ -24,6 +33,8 @@ class govuk::apps::mapit (
   $django_secret_key = undef,
   $sentry_dsn = undef,
   $gdal_version,
+  $geos_version = '3.9.0',
+  $proj_version = '4.9.3',
 ) {
   if $enabled {
     govuk::app { 'mapit':
@@ -46,14 +57,7 @@ class govuk::apps::mapit (
       },
     }
 
-    govuk_postgresql::db { 'mapit':
-      user                => 'mapit',
-      password            => $db_password,
-      extensions          => ['plpgsql', 'postgis'],
-      enable_in_pgbouncer => false,
-    }
-
-    class { 'postgresql::server::postgis': }
+    include ::postgresql::server::postgis # Required to load the PostGIS extension for mapit
 
     package {
       [
@@ -74,6 +78,36 @@ class govuk::apps::mapit (
       ensure  => $gdal_version,
       require => Class['gdal::repo'],
     }
+
+    package { 'geos':
+      ensure  => $geos_version,
+      require => Apt::Source['postgis'],
+    }
+
+    package { 'proj':
+      ensure  => $proj_version,
+      require => Apt::Source['postgis'],
+    }
+
+    # The mapit role needs to be a superuser in order to load the PostGIS extension for the test database.
+    postgresql::server::role { 'mapit':
+      superuser     => true,
+      password_hash => postgresql_password('mapit', $mapit_role_password);
+    }
+
+    govuk_postgresql::db { 'mapit':
+      user                => 'mapit',
+      password            => $db_password,
+      extensions          => ['plpgsql', 'postgis'],
+      enable_in_pgbouncer => false,
+    }
+
+    # The mapit role needs to be a superuser in order to load the PostGIS extension for the test database - it can now be removed as the extension is created
+    postgresql::server::role { 'mapit':
+      superuser     => false,
+      password_hash => postgresql_password('mapit', $mapit_role_password);
+    }
+
   }
 
   Govuk::App::Envvar {
