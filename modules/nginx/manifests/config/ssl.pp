@@ -15,33 +15,31 @@
 #     - www
 #
 define nginx::config::ssl( $certtype, $ensure = 'present' ) {
-  if ! $::aws_migration {
     case $certtype {
-      'wildcard_publishing': {
-          $cert = hiera('wildcard_publishing_certificate', '')
-          $key = hiera('wildcard_publishing_key', '')
-      }
-      'www': {
-          $cert = hiera('www_crt', '')
-          $key = hiera('www_key', '')
-      }
-      default: {
-          fail "${certtype} is not a valid certtype"
-      }
+    'wildcard_publishing': {
+        $cert = hiera('wildcard_publishing_certificate', '')
+        $key = hiera('wildcard_publishing_key', '')
     }
+    'www': {
+        $cert = hiera('www_crt', '')
+        $key = hiera('www_key', '')
+    }
+    default: {
+        fail "${certtype} is not a valid certtype"
+    }
+  }
 
-    file { "/etc/nginx/ssl/${name}.crt":
-      ensure  => $ensure,
-      content => $cert,
-      require => Class['nginx::package'],
-      notify  => Class['nginx::service'],
-    }
-    file { "/etc/nginx/ssl/${name}.key":
-      ensure  => $ensure,
-      content => $key,
-      require => Class['nginx::package'],
-      notify  => Class['nginx::service'],
-      mode    => '0640',
-    }
+  file { "/etc/nginx/ssl/${name}.crt":
+    ensure  => $ensure,
+    content => $cert,
+    require => Class['nginx::package'],
+    notify  => Class['nginx::service'],
+  }
+  file { "/etc/nginx/ssl/${name}.key":
+    ensure  => $ensure,
+    content => $key,
+    require => Class['nginx::package'],
+    notify  => Class['nginx::service'],
+    mode    => '0640',
   }
 }
